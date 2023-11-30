@@ -12,4 +12,3 @@ kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 libxposed-api = { group = "io.github.libxposed", name = "api", version.ref = "xposed-api" }
 libxposed-service = { group = "io.github.libxposed", name = "service", version.ref = "xposed-service" }
 lang3 = { module = "org.apache.commons:commons-lang3", version = "3.14.0"}
-annotations = { module = "androidx.appcompat:appcompat", version = "1.6.1"}

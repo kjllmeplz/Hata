@@ -74,5 +74,4 @@ dependencies {
     compileOnly(libs.libxposed.api)
     implementation(libs.libxposed.service)
     implementation(libs.lang3)
-    implementation(libs.annotations)
 }
