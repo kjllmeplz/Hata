@@ -75,6 +75,7 @@ class ModuleMain(base: XposedInterface, param: ModuleLoadedParam) : XposedModule
         }
     }
 
+    @SuppressLint("PrivateApi")
     override fun onPackageLoaded(param: PackageLoadedParam) {
         super.onPackageLoaded(param)
 

@@ -28,3 +28,5 @@
 # Obfuscation
 -repackageclasses
 -allowaccessmodification
+-dontwarn androidx.annotation.NonNull
+-dontwarn androidx.annotation.Nullable
