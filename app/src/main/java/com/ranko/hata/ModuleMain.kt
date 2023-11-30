@@ -78,7 +78,6 @@ class ModuleMain(base: XposedInterface, param: ModuleLoadedParam) : XposedModule
                             ggHeader = head
                         }
                     }
-
                 }
 
                 if (removeIDs.isNotEmpty()) {
