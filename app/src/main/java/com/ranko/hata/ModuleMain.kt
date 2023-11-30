@@ -20,7 +20,6 @@ class ModuleMain(base: XposedInterface, param: ModuleLoadedParam) : XposedModule
         module = this
     }
 
-
     @XposedHooker
     class SettingsHooker : Hooker {
         companion object {
@@ -107,7 +106,5 @@ class ModuleMain(base: XposedInterface, param: ModuleLoadedParam) : XposedModule
             loadMethod.isAccessible = true
             hook(loadMethod, SettingsHooker::class.java)
         }
-
     }
-
 }
