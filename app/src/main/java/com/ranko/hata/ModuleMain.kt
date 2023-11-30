@@ -31,27 +31,9 @@ class ModuleMain(base: XposedInterface, param: ModuleLoadedParam) : XposedModule
                 val mContext = (param.thisObject as Activity).baseContext
 
                 val ids = ArrayList<Int>()
-                ids.add(
-                    mContext.resources.getIdentifier(
-                        "security_status",
-                        "id",
-                        mContext.packageName
-                    )
-                )
-                ids.add(
-                    mContext.resources.getIdentifier(
-                        "safety_emergency_settings",
-                        "id",
-                        mContext.packageName
-                    )
-                )
-                ids.add(
-                    mContext.resources.getIdentifier(
-                        "feedback_services_settings",
-                        "id",
-                        mContext.packageName
-                    )
-                )
+                ids.add(mContext.resources.getIdentifier("security_status", "id", mContext.packageName))
+                ids.add(mContext.resources.getIdentifier("safety_emergency_settings", "id", mContext.packageName))
+                ids.add(mContext.resources.getIdentifier("feedback_services_settings", "id", mContext.packageName))
 
                 val headers = param.args[0] as MutableList<Any>
                 val removeIDs = ArrayList<Int>()
@@ -65,14 +47,12 @@ class ModuleMain(base: XposedInterface, param: ModuleLoadedParam) : XposedModule
 
                     for (id in ids) {
                         if (fieldID.getLong(head) == id.toLong()) {
-                            //module.log("Found id $id at Index $i")
                             removeIDs.add(i)
                         }
                     }
 
                     if (fieldTitle.get(head) != null) {
                         if (fieldTitle.get(head)?.equals(ggTitle) == true) {
-                            //module.log("Found Google at Index $i")
                             removeIDs.add(i)
                             ggHeader = head
                         }
