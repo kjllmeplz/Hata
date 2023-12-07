@@ -3,12 +3,13 @@ package com.ranko.hata
 import android.annotation.SuppressLint
 import io.github.libxposed.api.XposedInterface
 import io.github.libxposed.api.XposedModule
-import io.github.libxposed.api.XposedModuleInterface.SystemServerLoadedParam
 import io.github.libxposed.api.XposedModuleInterface.ModuleLoadedParam
 import io.github.libxposed.api.XposedModuleInterface.PackageLoadedParam
+import io.github.libxposed.api.XposedModuleInterface.SystemServerLoadedParam
 import org.apache.commons.lang3.ClassUtils
+import java.lang.reflect.Method
 
-private lateinit var module: ModuleMain
+internal lateinit var module: ModuleMain
 
 class ModuleMain(base: XposedInterface, param: ModuleLoadedParam) : XposedModule(base, param) {
 
@@ -18,8 +19,6 @@ class ModuleMain(base: XposedInterface, param: ModuleLoadedParam) : XposedModule
 
     override fun onSystemServerLoaded(param: SystemServerLoadedParam) {
         super.onSystemServerLoaded(param)
-
-
     }
 
     @SuppressLint("PrivateApi")
@@ -28,20 +27,20 @@ class ModuleMain(base: XposedInterface, param: ModuleLoadedParam) : XposedModule
 
         if (!param.isFirstPackage) return
 
-        if (param.packageName == "com.android.settings") {
-            val loadClass = ClassUtils.getClass(param.classLoader,"com.android.settings.MiuiSettings")
-            val loadMethod = loadClass.getDeclaredMethod("updateHeaderList", List::class.java)
-            loadMethod.isAccessible = true
-            hook(loadMethod, ModuleHook.SettingsHooker::class.java)
+        if (param.packageName == ModuleConst.SettingsPackage) {
+            hook(getMethod(param, "${ModuleConst.SettingsPackage}.MiuiSettings", "updateHeaderList", List::class.java),
+                ModuleHook.SettingsHooker::class.java)
         }
+    }
 
-        /*
-        if (param.packageName == "com.android.systemui") {
-            val loadClass = ClassUtils.getClass(param.classLoader,"com.android.systemui.statusbar.policy.SecurityControllerImpl")
-            val loadMethod = loadClass.getDeclaredMethod("hasCACertInCurrentUser", Boolean::class.java)
-            loadMethod.isAccessible = true
-            hook(loadMethod, ModuleHook.SystemUIHooker::class.java)
+    private fun getMethod(param: PackageLoadedParam, className: String, methodName: String, parameterTypes: Class<*>?): Method {
+        val loadClass = ClassUtils.getClass(param.classLoader, className)
+        val loadMethod: Method = if (parameterTypes != null) {
+            loadClass.getMethod(methodName, parameterTypes)
+        } else {
+            loadClass.getMethod(methodName)
         }
-         */
+        loadMethod.isAccessible = true
+        return loadMethod
     }
 }
