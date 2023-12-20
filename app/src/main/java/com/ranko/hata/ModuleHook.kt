@@ -10,7 +10,7 @@ class ModuleHook {
     @XposedHooker
     class SettingsHooker : XposedInterface.Hooker {
         companion object {
-            @SuppressLint("DiscouragedApi")
+            @SuppressLint("DiscouragedApi", "ResourceType")
             @Suppress("UNCHECKED_CAST")
             @JvmStatic
             @AfterInvocation
@@ -31,7 +31,6 @@ class ModuleHook {
 
                 val headers = param.args[0] as MutableList<Any>
                 val removeIDs = ArrayList<Int>()
-                var ggHeader: Any? = null
                 val moveMenus = ArrayList<Any?>()
 
                 for ((i, head) in headers.withIndex()) {
@@ -52,15 +51,6 @@ class ModuleHook {
                             break
                         }
                     }
-
-                    //Get Google
-                    val fieldTitle = head.javaClass.getDeclaredField("title")
-                    if (fieldTitle.get(head) != null) {
-                        if (fieldTitle.get(head)?.equals(ModuleConst.GGTitle) == true) {
-                            removeIDs.add(i)
-                            ggHeader = head
-                        }
-                    }
                 }
 
                 //Remove menu
@@ -68,9 +58,6 @@ class ModuleHook {
                     removeIDs.sortDescending()
                     for (removeID in removeIDs) headers.removeAt(removeID)
                 }
-
-                //Re-add Google
-                if (ggHeader != null) headers.add(ggHeader)
 
                 //Re-add others
                 for (menuID in moveMenus) headers.add(menuID!!)
